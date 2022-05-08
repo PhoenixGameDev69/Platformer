@@ -1,6 +1,8 @@
+using System.Collections;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D), typeof(Animator), typeof(PlayerInputReader))]
+public class Player : MonoBehaviour, ICreature
 {
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpForce;
@@ -9,6 +11,7 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
     private Animator _animator;
+    private PlayerInputReader _inputReader;
 
     private float _timeToAttack;
 
@@ -16,6 +19,7 @@ public class Player : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+        _inputReader = GetComponent<PlayerInputReader>();
 
         _timeToAttack = Time.time + _cooldownAttack;
     }
@@ -23,6 +27,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         _animator.SetFloat("Y_Velocity", _rigidbody.velocity.y);
+        _animator.SetBool("IsGrounded", _groundChecker.IsTouchingLayer);
     }
 
     public void HorizontalMovement(float direction)
@@ -55,6 +60,24 @@ public class Player : MonoBehaviour
             _animator.SetTrigger("Attack");
             _timeToAttack = Time.time + _cooldownAttack;
         }
+    }
+
+    public IEnumerator DeathInPoisonousPond()
+    {
+        _inputReader.enabled = false;
+        _animator.SetTrigger("Death");
+
+        var sprite = GetComponent<SpriteRenderer>();
+        while (sprite.color.a >= 0.1f)
+        {
+            var newColor = new Color(sprite.color.r, sprite.color.g, sprite.color.b, sprite.color.a);
+            newColor.a = Mathf.Lerp(newColor.a, 0.0f, 0.1f);
+            sprite.color = newColor;
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        Destroy(gameObject);
     }
 
     private void FlipSprite()

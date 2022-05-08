@@ -11,8 +11,8 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - NonCollision
   - 
   - 
   - 
@@ -44,11 +44,14 @@ TagManager:
   - name: Middleground
     uniqueID: 2358327177
     locked: 0
-  - name: Ground
-    uniqueID: 509844161
-    locked: 0
   - name: Player
     uniqueID: 4007710605
+    locked: 0
+  - name: BeforePlayer
+    uniqueID: 1306144129
+    locked: 0
+  - name: Ground
+    uniqueID: 509844161
     locked: 0
   - name: Foreground
     uniqueID: 453072423
