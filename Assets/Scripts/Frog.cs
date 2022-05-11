@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 public class Frog : MonoBehaviour, ICreature
 {
     [SerializeField] private float _jumpForce;
@@ -54,15 +55,8 @@ public class Frog : MonoBehaviour, ICreature
 
     private void Jump()
     {
-        var lineEnd = new Vector2(transform.position.x - 0.5f * transform.lossyScale.x, transform.position.y);
-        var wall = Physics2D.Linecast(transform.position, lineEnd, _wallsLayer);
-
-        if (wall)
-        {
-            FlipSprite();
-        }
-
-        _rigidbody.AddForce(new Vector2(-transform.localScale.x * _jumpForce, 0), ForceMode2D.Impulse);
+        WallCheck();
+        _rigidbody.AddForce(new Vector2(-transform.localScale.x * _jumpForce, 1.0f), ForceMode2D.Impulse);
     }
 
     public IEnumerator DeathInPoisonousPond()
@@ -81,5 +75,16 @@ public class Frog : MonoBehaviour, ICreature
         }
 
         Destroy(gameObject);
+    }
+
+    private void WallCheck()
+    {
+        var lineEnd = new Vector2(transform.position.x - 0.5f * transform.lossyScale.x, transform.position.y);
+        var wall = Physics2D.Linecast(transform.position, lineEnd, _wallsLayer);
+
+        if (wall)
+        {
+            FlipSprite();
+        }
     }
 }

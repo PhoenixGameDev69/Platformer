@@ -4,6 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator), typeof(PlayerInputReader))]
 public class Player : MonoBehaviour, ICreature
 {
+    [Zenject.Inject]
+    private readonly Settings _settings;
+
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpForce;
     [SerializeField] private float _cooldownAttack;
@@ -84,5 +87,17 @@ public class Player : MonoBehaviour, ICreature
     {
         var newScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
         transform.localScale = newScale;
+    }
+
+    [System.Serializable]
+    public class Settings
+    {
+        [SerializeField] private float _speed;
+        [SerializeField] private float _jumpForce;
+        [SerializeField] private float _cooldownAttack;
+
+        public float Speed => _speed;
+        public float JumpForce => _jumpForce;
+        public float CooldownAttack => _cooldownAttack;
     }
 }
