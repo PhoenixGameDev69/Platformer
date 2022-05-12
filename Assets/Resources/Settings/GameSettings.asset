@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: GameSettings
   m_EditorClassIdentifier: 
   _playerSettings:
-    _speed: 0
-    _jumpForce: 0
-    _cooldownAttack: 0
+    _speed: 4.5
+    _jumpForce: 12
+    _cooldownAttack: 1
   _soundSettings:
-    _musicVolume: 0.5
+    _musicVolume: 0.026
     _sfxVolume: 0.5

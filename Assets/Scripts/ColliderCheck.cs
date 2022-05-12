@@ -16,7 +16,7 @@ public class ColliderCheck : MonoBehaviour
         _collider = GetComponent<Collider2D>();
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         IsTouchingLayer = _collider.IsTouchingLayers(_layers);
     }

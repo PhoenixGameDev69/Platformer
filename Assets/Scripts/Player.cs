@@ -7,9 +7,6 @@ public class Player : MonoBehaviour, ICreature
     [Zenject.Inject]
     private readonly Settings _settings;
 
-    [SerializeField] private float _speed;
-    [SerializeField] private float _jumpForce;
-    [SerializeField] private float _cooldownAttack;
     [SerializeField] private ColliderCheck _groundChecker;
 
     private Rigidbody2D _rigidbody;
@@ -18,13 +15,12 @@ public class Player : MonoBehaviour, ICreature
 
     private float _timeToAttack;
 
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _inputReader = GetComponent<PlayerInputReader>();
-
-        _timeToAttack = Time.time + _cooldownAttack;
     }
 
     private void Update()
@@ -35,7 +31,8 @@ public class Player : MonoBehaviour, ICreature
 
     public void HorizontalMovement(float direction)
     {
-        var movement = new Vector2(_speed * direction, _rigidbody.velocity.y);
+        var movement = new Vector2(_settings.Speed * direction, _rigidbody.velocity.y);
+
         _rigidbody.velocity = movement;
 
         _animator.SetFloat("X_Velocity", Mathf.Abs(direction));
@@ -50,7 +47,7 @@ public class Player : MonoBehaviour, ICreature
     {
         if (_groundChecker.IsTouchingLayer)
         {
-            _rigidbody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
+            _rigidbody.AddForce(Vector2.up * _settings.JumpForce, ForceMode2D.Impulse);
             _animator.SetTrigger("Jump");
         }
     }
@@ -61,7 +58,7 @@ public class Player : MonoBehaviour, ICreature
         {
             HorizontalMovement(0.0f);
             _animator.SetTrigger("Attack");
-            _timeToAttack = Time.time + _cooldownAttack;
+            _timeToAttack = Time.time + _settings.CooldownAttack;
         }
     }
 
@@ -87,6 +84,12 @@ public class Player : MonoBehaviour, ICreature
     {
         var newScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
         transform.localScale = newScale;
+    }
+
+    public void AddVelocityPlatform(Vector2 velocity)
+    {
+        var newVelocity = new Vector2(_rigidbody.velocity.x + velocity.x, _rigidbody.velocity.y);
+        _rigidbody.velocity = newVelocity;
     }
 
     [System.Serializable]

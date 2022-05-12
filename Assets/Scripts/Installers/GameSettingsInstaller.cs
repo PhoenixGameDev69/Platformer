@@ -9,7 +9,7 @@ public class GameSettingsInstaller : ScriptableObjectInstaller<GameSettingsInsta
 
     public override void InstallBindings()
     {
-        Container.BindInstance(_playerSettings);
-        Container.BindInstance(_soundSettings);
+        Container.BindInstance(_playerSettings).AsSingle().NonLazy();
+        Container.BindInstance(_soundSettings).AsSingle().NonLazy();
     }
 }

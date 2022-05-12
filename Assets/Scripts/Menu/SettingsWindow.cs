@@ -11,10 +11,15 @@ public class SettingsWindow : MonoBehaviour
     [SerializeField] private Button _close;
 
     private Animator _animator;
-    [Zenject.Inject]
     private SoundSettings _soundSettings;
 
     private Action _onClose;
+
+    [Zenject.Inject]
+    public void Construct(SoundSettings soundSettings)
+    {
+        _soundSettings = soundSettings;
+    }
 
     private void Awake()
     {
@@ -37,5 +42,11 @@ public class SettingsWindow : MonoBehaviour
     private void OnAnimationClose()
     {
         _onClose?.Invoke();
+    }
+
+    private void OnDestroy()
+    {
+        _music.onValueChanged.RemoveAllListeners();
+        _sfx.onValueChanged.RemoveAllListeners();
     }
 }

@@ -15,11 +15,11 @@ public class SoundSettings
         get => _musicVolume;
         set
         {
-            if(value >= 0.0f && value <= 1.0f) { _musicVolume = value; }
-            else if(value > 1.0f) { _musicVolume = 1.0f; }
+            if (value >= 0.0f && value <= 1.0f) { _musicVolume = value; }
+            else if (value > 1.0f) { _musicVolume = 1.0f; }
             else { _musicVolume = 0.0f; }
 
-            OnMusicVolumeChanged?.Invoke(value);
+            OnMusicVolumeChanged?.Invoke(_musicVolume);
         }
     }
 
@@ -32,7 +32,7 @@ public class SoundSettings
             else if (value > 1.0f) { _sfxVolume = 1.0f; }
             else { _sfxVolume = 0.0f; }
 
-            OnSfxVolumeChanged?.Invoke(value);
+            OnSfxVolumeChanged?.Invoke(_sfxVolume);
         }
     }
 }

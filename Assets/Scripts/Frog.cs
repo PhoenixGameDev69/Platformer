@@ -77,6 +77,12 @@ public class Frog : MonoBehaviour, ICreature
         Destroy(gameObject);
     }
 
+    public void AddVelocityPlatform(Vector2 velocity)
+    {
+        var newVelocity = _rigidbody.velocity + velocity;
+        _rigidbody.velocity = newVelocity;
+    }
+
     private void WallCheck()
     {
         var lineEnd = new Vector2(transform.position.x - 0.5f * transform.lossyScale.x, transform.position.y);

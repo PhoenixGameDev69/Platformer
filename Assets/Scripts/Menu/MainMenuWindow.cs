@@ -9,14 +9,12 @@ public class MainMenuWindow : MonoBehaviour
     [SerializeField] private Button _startButton;
     [SerializeField] private Button _settingsButton;
     [SerializeField] private Button _exitButton;
-
+    [Zenject.Inject]
+    private readonly Zenject.DiContainer _diContainer;
     private Transform _canvasTransform;
     private Animator _animator;
 
     private Action _onClose;
-
-    [Zenject.Inject]
-    private SoundSettings _soundSettings;
 
     private void Awake()
     {
@@ -26,20 +24,18 @@ public class MainMenuWindow : MonoBehaviour
         _startButton.onClick.AddListener(OnStartGame);
         _settingsButton.onClick.AddListener(OnSettingsOpen);
         _exitButton.onClick.AddListener(OnExitGame);
-
-        Debug.Log(_soundSettings.MusicVolume);
     }
 
     private void OnStartGame()
     {
-        _onClose += () => SceneManager.LoadScene(1);
+        _onClose += () => { SceneManager.LoadScene(1); };
         _animator.SetTrigger("Close");
     }
 
     private void OnSettingsOpen()
     {
-        var settingsPrefab = Resources.Load("Menus/SettingsWindow");
-        Instantiate(settingsPrefab, _canvasTransform);
+        var settingsPrefab = Resources.Load(GlobalStringVars.SettingsWindowPath);
+        _diContainer.InstantiatePrefab(settingsPrefab, _canvasTransform);
     }
 
     private void OnExitGame()
@@ -58,5 +54,12 @@ public class MainMenuWindow : MonoBehaviour
     private void OnAnimationClose()
     {
         _onClose?.Invoke();
+    }
+
+    private void OnDestroy()
+    {
+        _startButton.onClick.RemoveAllListeners();
+        _settingsButton.onClick.RemoveAllListeners();
+        _exitButton.onClick.RemoveAllListeners();
     }
 }
